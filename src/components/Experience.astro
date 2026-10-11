@@ -1,0 +1,23 @@
+---
+import { experiences } from "../data/portfolio";
+---
+
+<section id="experience" class="py-12">
+    <h2 class="text-3xl font-bold mb-6">Expérience</h2>
+
+    <div class="space-y-6">
+        {experiences.map((xp) => (
+                <article class="bg-surface border-line p-6 rounded-xl shadow-sm border">
+                    <div class="flex flex-wrap justify-between gap-x-4 gap-y-1 mb-1">
+                        <h3 class="text-xl font-bold">{xp.role}</h3>
+                        <p class="text-sm text-muted">{xp.period}</p>
+                    </div>
+                    <p class="font-medium text-primary mb-3">{xp.company}</p>
+                    <p class="text-muted mb-4">{xp.summary}</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        {xp.highlights.map((item) => <li>{item}</li>)}
+                    </ul>
+                </article>
+        ))}
+    </div>
+</section>

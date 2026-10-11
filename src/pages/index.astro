@@ -1,11 +1,50 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Experience from "../components/Experience.astro";
+import Projects from "../components/Projects.astro";
+import Technologies from "../components/Technologies.astro";
+import Interests from "../components/Interests.astro";
+import Contact from "../components/Contact.astro";
+import { profile } from "../data/portfolio";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={`${profile.name} - Portfolio`}>
+	<main class="max-w-4xl mx-auto px-6 py-12">
+
+		<header class="flex justify-between items-start gap-4 mb-16">
+			<h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Salut, je suis <span class="text-primary">{profile.name}</span> 👋</h1>
+			<ThemeToggle />
+		</header>
+
+		<section class="py-12 mb-8">
+			<h2 class="text-2xl text-muted mb-6">{profile.headline}</h2>
+			<p class="text-lg leading-relaxed max-w-2xl mb-8">{profile.intro}</p>
+
+			<div class="max-w-2xl rounded-xl border border-primary/30 bg-primary-soft px-5 py-4 mb-8">
+				<p class="font-semibold mb-1">{profile.internship.title}</p>
+				<p class="text-muted">{profile.internship.details}</p>
+			</div>
+
+			<div class="flex flex-wrap gap-6">
+				<a href="#projets" class="font-medium hover:text-primary transition-colors">
+					↓ Découvrir mes projets
+				</a>
+				<a href="#contact" class="font-medium hover:text-primary transition-colors">
+					↓ Me contacter
+				</a>
+			</div>
+		</section>
+
+		<Experience id="projets" />
+		<Projects />
+		<Technologies />
+		<Interests />
+		<Contact id="contact" />
+
+		<footer class="py-8 text-center text-sm text-muted mt-12">
+			© {new Date().getFullYear()} {profile.name}. Construit avec Astro & Tailwind.
+		</footer>
+
+	</main>
 </Layout>

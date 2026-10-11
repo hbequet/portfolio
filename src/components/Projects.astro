@@ -1,0 +1,65 @@
+---
+import { projects } from "../data/portfolio";
+
+// Les filtres sont déduits des tags des projets : rien à maintenir en double.
+const tags = [...new Set(projects.flatMap((project) => project.tags))];
+const filters = [{ label: "Tous", value: "all" }, ...tags.map((tag) => ({ label: tag, value: tag }))];
+---
+
+<section id="projets" class="py-12">
+    <h2 class="text-3xl font-bold mb-6">Projets</h2>
+
+    <div class="flex flex-wrap gap-2 mb-8">
+        {filters.map(({ label, value }) => (
+                <button
+                        class="filter-btn px-4 py-1 rounded-full text-sm bg-chip hover:bg-chip-hover aria-pressed:bg-primary aria-pressed:text-on-primary aria-pressed:font-medium aria-pressed:hover:bg-primary-hover transition-colors"
+                        data-filter={value}
+                        aria-pressed={value === "all" ? "true" : "false"}
+                >
+                    {label}
+                </button>
+        ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid">
+        {projects.map((project) => (
+                <article class="project-card bg-surface border-line p-6 rounded-xl shadow-sm border transition-all" data-tags={project.tags.join(",")}>
+                    <p class="text-sm text-muted mb-1">{project.kind}</p>
+                    <h3 class="text-xl font-bold mb-2">{project.title}</h3>
+                    <p class="text-muted mb-4">{project.description}</p>
+                    <div class="flex flex-wrap gap-2">
+                        {project.tags.map((tag) => (
+                                <span class="text-xs px-2 py-1 bg-primary-soft text-primary-soft-fg rounded-md">
+                                    {tag}
+                                </span>
+                        ))}
+                    </div>
+                    {project.link && (
+                            <a href={project.link} class="inline-block mt-4 text-primary hover:underline">Voir le code →</a>
+                    )}
+                </article>
+        ))}
+    </div>
+</section>
+
+<script>
+    const buttons = document.querySelectorAll(".filter-btn");
+    const cards = document.querySelectorAll(".project-card");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            buttons.forEach(btn => btn.setAttribute("aria-pressed", String(btn === button)));
+
+            const filter = button.getAttribute("data-filter");
+
+            cards.forEach(card => {
+                const tags = card.getAttribute("data-tags")?.split(",") || [];
+                if (filter === "all" || tags.includes(filter || "")) {
+                    (card as HTMLElement).style.display = "block";
+                } else {
+                    (card as HTMLElement).style.display = "none";
+                }
+            });
+        });
+    });
+</script>

@@ -1,1 +1,47 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+    --page: #f8fafc;
+    --surface: #ffffff;
+    --line: #e2e8f0;
+    --fg: #0f172a;
+    --muted: #475569;
+    --chip: #e2e8f0;
+    --chip-hover: #cbd5e1;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --on-primary: #ffffff;
+    --primary-soft: #dbeafe;
+    --primary-soft-fg: #1e40af;
+}
+
+.dark {
+    --page: #0f172a;
+    --surface: #1e293b;
+    --line: #334155;
+    --fg: #f8fafc;
+    --muted: #cbd5e1;
+    --chip: #334155;
+    --chip-hover: #475569;
+    --primary: #60a5fa;
+    --primary-hover: #3b82f6;
+    --on-primary: #ffffff;
+    --primary-soft: rgb(30 58 138 / 0.3);
+    --primary-soft-fg: #93c5fd;
+}
+
+@theme inline {
+    --color-page: var(--page);
+    --color-surface: var(--surface);
+    --color-line: var(--line);
+    --color-fg: var(--fg);
+    --color-muted: var(--muted);
+    --color-chip: var(--chip);
+    --color-chip-hover: var(--chip-hover);
+    --color-primary: var(--primary);
+    --color-primary-hover: var(--primary-hover);
+    --color-on-primary: var(--on-primary);
+    --color-primary-soft: var(--primary-soft);
+    --color-primary-soft-fg: var(--primary-soft-fg);
+}

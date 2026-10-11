@@ -1,0 +1,35 @@
+---
+import { technologies, learning, alsoSeen, methods } from "../data/portfolio";
+---
+
+<section id="technologies" class="py-12">
+    <h2 class="text-3xl font-bold mb-6">Technologies</h2>
+
+    <div class="space-y-5 mb-8">
+        {technologies.map((group) => (
+                <div>
+                    <h3 class="font-semibold mb-2">{group.category}</h3>
+                    <div class="flex flex-wrap gap-2">
+                        {group.items.map((item) => (
+                                <span class="text-sm px-3 py-1 rounded-full bg-chip">{item}</span>
+                        ))}
+                    </div>
+                </div>
+        ))}
+    </div>
+
+    <dl class="space-y-3 text-muted">
+        <div>
+            <dt class="inline font-semibold text-fg">En cours d'apprentissage : </dt>
+            <dd class="inline">{learning}</dd>
+        </div>
+        <div>
+            <dt class="inline font-semibold text-fg">Aussi vu : </dt>
+            <dd class="inline">{alsoSeen.join(", ")}</dd>
+        </div>
+        <div>
+            <dt class="inline font-semibold text-fg">Méthodes et langues : </dt>
+            <dd class="inline">{methods.join(", ")}</dd>
+        </div>
+    </dl>
+</section>
