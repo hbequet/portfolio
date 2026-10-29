@@ -1,0 +1,39 @@
+---
+import { profile, navItems } from "../data/portfolio";
+---
+
+<header class="fixed top-0 left-0 right-0 z-40 h-14 bg-header-bg backdrop-blur-md border-b border-border-header">
+    <div class="max-w-6xl mx-auto h-full px-5 sm:px-8 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <a href="#presentation" class="text-sm font-semibold tracking-tight text-text-main hover:opacity-80 transition-opacity">
+                {profile.name}
+            </a>
+
+            <!-- Rappel recherche de stage dans le header -->
+            <a
+                href="#stage-contact"
+                class="hidden md:inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface border border-accent-green/40 hover:border-accent-green hover:bg-surface-hover text-[11px] text-text-main transition-all group"
+                title="Voir l'objectif de stage et me contacter"
+            >
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-green opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-green"></span>
+                </span>
+                <span class="font-medium text-text-light group-hover:text-text-main">Stage fév. 2027</span>
+                <span class="text-accent-green group-hover:translate-y-0.5 transition-transform text-[10px]">↓</span>
+            </a>
+        </div>
+
+        <nav class="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
+            {navItems.map((item, index) => (
+                <a
+                    href={`#${item.id}`}
+                    data-target={item.id}
+                    class:list={["nav-link", { active: index === 0 }]}
+                >
+                    {item.label}
+                </a>
+            ))}
+        </nav>
+    </div>
+</header>

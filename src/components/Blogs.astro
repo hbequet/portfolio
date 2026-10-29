@@ -1,0 +1,103 @@
+---
+import { blogPosts, allBlogYears } from "../data/portfolio";
+---
+
+<section id="blogs" class="snap-section pt-14">
+    <div class="max-w-6xl w-full mx-auto px-5 sm:px-8 py-5 flex-1 flex flex-col justify-between overflow-hidden">
+
+        <!-- En-tête avec titre, filtres temporels et tri -->
+        <div class="shrink-0 space-y-2.5">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-text-main">Notes &amp; Articles</h2>
+                    <p class="text-xs sm:text-sm text-text-muted mt-0.5">
+                        Retours d'expérience techniques, benchmarks et apprentissages au fil de mes projets.
+                    </p>
+                </div>
+
+                <!-- Tri temporel et filtre par année -->
+                <div class="flex items-center gap-2 flex-wrap">
+
+                    <!-- Filtre par année (généré automatiquement depuis les articles) -->
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-text-dim text-[11px] font-mono">Année :</span>
+                        <div id="blogYearFilterGroup" class="inline-flex rounded-md bg-surface p-0.5 border border-border-subtle gap-0.5">
+                            <button
+                                type="button"
+                                data-blog-year="Toutes"
+                                class="blog-year-btn px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer bg-text-main text-bg font-medium"
+                            >
+                                Toutes
+                            </button>
+                            {allBlogYears.map((yr) => (
+                                <button
+                                    type="button"
+                                    data-blog-year={yr.toString()}
+                                    class="blog-year-btn px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer text-text-muted hover:text-text-main"
+                                >
+                                    {yr}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <!-- Bouton de tri chronologique (les derniers d'abord) -->
+                    <button
+                        id="sortBlogDateBtn"
+                        type="button"
+                        data-order="desc"
+                        class="px-2.5 py-1 rounded text-xs font-mono bg-surface border border-border-subtle text-text-muted hover:text-text-main transition-colors flex items-center gap-1.5 cursor-pointer ml-1 select-none"
+                        title="Inverser l'ordre chronologique des articles"
+                    >
+                        <span>Tri :</span>
+                        <span id="sortBlogDateLabel" class="text-text-main font-medium">Plus récents ↓</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste éditoriale : Hauteur calibrée pour afficher 4 articles complets à la fois -->
+        <div class="my-auto border-y border-border-subtle">
+            <div
+                id="blogsList"
+                class="divide-y divide-border-subtle max-h-[500px] overflow-y-auto inner-scroll pr-1"
+            >
+                {blogPosts.map((post) => (
+                    <article
+                        data-blog-id={post.id}
+                        class="blog-row py-2.5 sm:py-3 px-2 hover:bg-surface-card-hover transition-colors cursor-pointer group flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 sm:gap-6"
+                    >
+                        <div class="space-y-1 max-w-2xl">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm sm:text-base font-semibold text-text-main group-hover:underline underline-offset-4">
+                                    {post.title}
+                                </h3>
+                            </div>
+                            <p class="text-xs sm:text-sm text-text-muted leading-relaxed">
+                                {post.summary}
+                            </p>
+                            <div class="flex flex-wrap gap-1.5 pt-0.5">
+                                {post.tags.map((tag) => (
+                                    <span class="px-2 py-0.2 rounded bg-surface border border-border-subtle font-mono text-[10px] text-text-dim">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div class="flex sm:flex-col sm:items-end justify-between gap-1 shrink-0 text-xs text-text-muted font-mono">
+                            <span class="text-text-light">{post.date}</span>
+                            <span class="text-text-dim text-[11px]">{post.readTime}</span>
+                        </div>
+                    </article>
+                ))}
+            </div>
+        </div>
+
+        <!-- Pied de section -->
+        <div class="pt-2 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted shrink-0">
+            <span id="blogCountText">{blogPosts.length} article{blogPosts.length > 1 ? "s" : ""} affiché{blogPosts.length > 1 ? "s" : ""}</span>
+            <a href="#contact" class="hover:text-text-main transition-colors">Me contacter / Discuter ↓</a>
+        </div>
+    </div>
+</section>

@@ -1,65 +1,212 @@
 ---
-import { projects } from "../data/portfolio";
-
-// Les filtres sont déduits des tags des projets : rien à maintenir en double.
-const tags = [...new Set(projects.flatMap((project) => project.tags))];
-const filters = [{ label: "Tous", value: "all" }, ...tags.map((tag) => ({ label: tag, value: tag }))];
+import {
+    projects,
+    projectTypes,
+    allProjectYears,
+    allProjectTechnologies
+} from "../data/portfolio";
 ---
 
-<section id="projets" class="py-12">
-    <h2 class="text-3xl font-bold mb-6">Projets</h2>
+<section id="projets" class="snap-section pt-14">
+    <div class="max-w-6xl w-full mx-auto px-5 sm:px-8 py-5 flex-1 flex flex-col justify-between overflow-hidden">
 
-    <div class="flex flex-wrap gap-2 mb-8">
-        {filters.map(({ label, value }) => (
-                <button
-                        class="filter-btn px-4 py-1 rounded-full text-sm bg-chip hover:bg-chip-hover aria-pressed:bg-primary aria-pressed:text-on-primary aria-pressed:font-medium aria-pressed:hover:bg-primary-hover transition-colors"
-                        data-filter={value}
-                        aria-pressed={value === "all" ? "true" : "false"}
-                >
-                    {label}
-                </button>
-        ))}
-    </div>
+        <!-- En-tête + Barre de recherche + Filtres -->
+        <div class="space-y-3.5 shrink-0">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-text-main">Expérience &amp; Projets</h2>
+                    <p class="text-xs sm:text-sm text-text-muted mt-0.5">
+                        Filtrez par type (Perso, Pro, Universitaire), par année ou cochez les technologies dans le menu déroulant.
+                    </p>
+                </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid">
-        {projects.map((project) => (
-                <article class="project-card bg-surface border-line p-6 rounded-xl shadow-sm border transition-all" data-tags={project.tags.join(",")}>
-                    <p class="text-sm text-muted mb-1">{project.kind}</p>
-                    <h3 class="text-xl font-bold mb-2">{project.title}</h3>
-                    <p class="text-muted mb-4">{project.description}</p>
-                    <div class="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                                <span class="text-xs px-2 py-1 bg-primary-soft text-primary-soft-fg rounded-md">
-                                    {tag}
-                                </span>
+                <!-- Barre de recherche textuelle -->
+                <div class="relative w-full sm:w-64">
+                    <svg class="w-4 h-4 text-text-dim absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input
+                        id="searchInput"
+                        type="text"
+                        placeholder="Rechercher par mot-clé..."
+                        class="w-full pl-9 pr-8 py-1.5 rounded-md bg-surface border border-border-subtle text-xs sm:text-sm text-text-main placeholder-text-dim focus:outline-none focus:border-border-hover transition-colors"
+                    />
+                    <button id="clearSearch" type="button" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-text-muted hover:text-text-main cursor-pointer" aria-label="Effacer">
+                        ✕
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barre de filtres principale : Type, Année & Menu Déroulant Select Technos -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border-subtle/80 text-xs">
+
+                <!-- Groupe Type : Déterminé automatiquement depuis les projets -->
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-text-dim text-[11px] font-mono mr-1">Type :</span>
+                    <div id="typeFilterGroup" class="inline-flex rounded-md bg-surface p-0.5 border border-border-subtle gap-0.5">
+                        {projectTypes.map((type, idx) => (
+                            <button
+                                type="button"
+                                data-type={type}
+                                class:list={[
+                                    "type-filter-btn px-2.5 py-1 rounded text-xs font-mono transition-colors cursor-pointer",
+                                    idx === 0
+                                        ? "bg-text-main text-bg font-medium"
+                                        : "text-text-muted hover:text-text-main"
+                                ]}
+                            >
+                                {type}
+                            </button>
                         ))}
                     </div>
-                    {project.link && (
-                            <a href={project.link} class="inline-block mt-4 text-primary hover:underline">Voir le code →</a>
-                    )}
+                </div>
+
+                <!-- Groupe Années + Tri + Sélecteur déroulant vertical de Technos -->
+                <div class="flex items-center gap-2 flex-wrap">
+
+                    <!-- Filtre Année : Déterminé automatiquement depuis les projets -->
+                    <span class="text-text-dim text-[11px] font-mono">Année :</span>
+                    <div id="yearFilterGroup" class="flex items-center gap-1 overflow-x-auto">
+                        <button
+                            type="button"
+                            data-year="Toutes"
+                            class="year-filter-btn px-2.5 py-1 rounded text-xs font-mono transition-colors bg-text-main text-bg font-medium cursor-pointer"
+                        >
+                            Toutes
+                        </button>
+                        {allProjectYears.map((yr) => (
+                            <button
+                                type="button"
+                                data-year={yr.toString()}
+                                class="year-filter-btn px-2 py-1 rounded text-xs font-mono transition-colors bg-surface text-text-muted border border-border-subtle hover:text-text-main cursor-pointer"
+                            >
+                                {yr}
+                            </button>
+                        ))}
+                    </div>
+
+                    <!-- Tri par année (Ordre) -->
+                    <button
+                        id="sortYearBtn"
+                        type="button"
+                        data-order="desc"
+                        class="px-2 py-1 rounded text-xs font-mono bg-surface border border-border-subtle text-text-muted hover:text-text-main transition-colors flex items-center gap-1 cursor-pointer"
+                        title="Inverser le tri chronologique"
+                    >
+                        <span>Tri :</span>
+                        <span id="sortYearLabel">Récent ↓</span>
+                    </button>
+
+                    <!-- SÉLECTEUR VERTICAL (SELECT DROPDOWN) POUR LES TECHNOS -->
+                    <div class="relative" id="techDropdownWrapper">
+                        <button
+                            id="techDropdownTrigger"
+                            type="button"
+                            class="flex items-center justify-between gap-2 px-3 py-1 rounded-md bg-surface border border-border-subtle hover:border-border-hover text-xs font-mono text-text-light transition-colors cursor-pointer select-none"
+                            aria-expanded="false"
+                        >
+                            <span class="flex items-center gap-1.5">
+                                <span class="text-text-dim text-[11px]">Technos :</span>
+                                <span id="techDropdownLabel" class="text-text-main font-medium">Toutes</span>
+                            </span>
+                            <svg id="techDropdownChevron" class="w-3.5 h-3.5 text-text-muted transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+
+                        <!-- Menu déroulant vertical avec scrollbar -->
+                        <div
+                            id="techDropdownMenu"
+                            class="hidden absolute right-0 top-full mt-1.5 w-64 max-w-[90vw] bg-surface border border-border-subtle rounded-md shadow-2xl z-30 p-2 space-y-1.5"
+                        >
+                            <div class="flex items-center justify-between px-2 pb-1.5 border-b border-border-subtle text-[11px] font-mono text-text-dim">
+                                <span id="techSelectedCountText">Toutes les technologies</span>
+                                <button
+                                    id="clearTechsBtn"
+                                    type="button"
+                                    class="hidden text-text-muted hover:text-text-main underline cursor-pointer"
+                                >
+                                    Tout décocher
+                                </button>
+                            </div>
+
+                            <!-- Liste verticale scrollable -->
+                            <div class="max-h-56 overflow-y-auto inner-scroll space-y-0.5 pr-1">
+                                {allProjectTechnologies.map((tech) => (
+                                    <label class="tech-dropdown-item flex items-center justify-between gap-2 px-2 py-1.5 rounded hover:bg-surface-hover text-xs font-mono text-text-light cursor-pointer select-none transition-colors">
+                                        <div class="flex items-center gap-2 overflow-hidden">
+                                            <input
+                                                type="checkbox"
+                                                value={tech.name}
+                                                class="tech-checkbox w-3.5 h-3.5 rounded border-border-subtle text-text-main bg-bg focus:ring-0 focus:ring-offset-0 cursor-pointer accent-white"
+                                            />
+                                            <span class="truncate">{tech.name}</span>
+                                        </div>
+                                        <span class="text-[10px] text-text-dim shrink-0">
+                                            {tech.count}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Grille des cartes de projets -->
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 my-auto overflow-y-auto inner-scroll max-h-[62vh] py-1 pr-1">
+            {projects.map((proj) => (
+                <article
+                    data-proj-id={proj.id}
+                    class="project-card clean-card p-5 flex flex-col justify-between gap-4 cursor-pointer group"
+                >
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase font-semibold tracking-wider bg-surface-hover border border-border-subtle text-text-light">
+                                    {proj.type}
+                                </span>
+                                <span class="text-xs font-mono text-text-dim">
+                                    {proj.yearDisplay}
+                                </span>
+                            </div>
+                            <span class="text-xs text-text-muted group-hover:text-text-main group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                                ↗
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3 class="text-base font-semibold text-text-main group-hover:underline underline-offset-4">
+                                {proj.title}
+                            </h3>
+                            <p class="text-xs font-mono text-text-dim mt-0.5">
+                                {proj.kind}
+                            </p>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-text-muted leading-relaxed">
+                            {proj.shortDesc}
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5 pt-2 border-t border-border-subtle/60">
+                        {proj.tags.map((tag) => (
+                            <span class="px-2 py-0.5 rounded bg-surface-hover border border-border-subtle font-mono text-[11px] text-text-light">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
                 </article>
-        ))}
+            ))}
+        </div>
+
+        <!-- Pied de section -->
+        <div class="pt-3 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted shrink-0">
+            <span id="projectCountText">{projects.length} réalisations affichées</span>
+            <a href="#technos" class="hover:text-text-main transition-colors">Voir l'ensemble des technologies ↓</a>
+        </div>
     </div>
 </section>
-
-<script>
-    const buttons = document.querySelectorAll(".filter-btn");
-    const cards = document.querySelectorAll(".project-card");
-
-    buttons.forEach(button => {
-        button.addEventListener("click", () => {
-            buttons.forEach(btn => btn.setAttribute("aria-pressed", String(btn === button)));
-
-            const filter = button.getAttribute("data-filter");
-
-            cards.forEach(card => {
-                const tags = card.getAttribute("data-tags")?.split(",") || [];
-                if (filter === "all" || tags.includes(filter || "")) {
-                    (card as HTMLElement).style.display = "block";
-                } else {
-                    (card as HTMLElement).style.display = "none";
-                }
-            });
-        });
-    });
-</script>

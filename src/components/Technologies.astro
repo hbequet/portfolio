@@ -1,35 +1,80 @@
 ---
-import { technologies, learning, alsoSeen, methods } from "../data/portfolio";
+import { techColumns, learning } from "../data/portfolio";
 ---
 
-<section id="technologies" class="py-12">
-    <h2 class="text-3xl font-bold mb-6">Technologies</h2>
+<section id="technos" class="snap-section pt-14">
+    <div class="max-w-6xl w-full mx-auto px-5 sm:px-8 py-5 flex-1 flex flex-col justify-between overflow-hidden">
 
-    <div class="space-y-5 mb-8">
-        {technologies.map((group) => (
-                <div>
-                    <h3 class="font-semibold mb-2">{group.category}</h3>
-                    <div class="flex flex-wrap gap-2">
-                        {group.items.map((item) => (
-                                <span class="text-sm px-3 py-1 rounded-full bg-chip">{item}</span>
+        <!-- En-tête de section -->
+        <div class="shrink-0 space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-bold text-text-main">Technologies</h2>
+            <p class="text-xs sm:text-sm text-text-muted">
+                Ce que j'utilise en BUT, en stage et sur mes projets personnels. Cliquez sur une technologie pour filtrer les projets associés.
+            </p>
+        </div>
+
+        <!-- Grille des technos en 5 colonnes -->
+        <div id="techColumnsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 my-auto overflow-y-auto inner-scroll max-h-[58vh] py-1 pr-1">
+            {techColumns.map((col) => (
+                <div class="clean-card p-4 flex flex-col gap-3">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-border-subtle pb-2">
+                        {col.title}
+                    </h3>
+                    <div class="divide-y divide-border-divider">
+                        {col.items.map((item) => (
+                            <button
+                                type="button"
+                                data-filter={item.filterTag}
+                                class="tech-row w-full text-left py-2 first:pt-0 last:pb-0 group flex flex-col gap-1 cursor-pointer"
+                            >
+                                <div class="flex items-center justify-between gap-1">
+                                    <span class="font-mono text-xs font-medium text-text-main group-hover:underline underline-offset-4">
+                                        {item.name}
+                                    </span>
+                                    <span class="text-[10px] font-mono text-text-dim group-hover:text-text-muted transition-colors shrink-0">
+                                        {item.count}
+                                    </span>
+                                </div>
+                                <p class="text-[11px] text-text-muted leading-snug">
+                                    {item.desc}
+                                </p>
+                            </button>
                         ))}
                     </div>
                 </div>
-        ))}
-    </div>
+            ))}
+        </div>
 
-    <dl class="space-y-3 text-muted">
-        <div>
-            <dt class="inline font-semibold text-fg">En cours d'apprentissage : </dt>
-            <dd class="inline">{learning}</dd>
+        <!-- Encart "En cours d'apprentissage & Veille" configurable placé sous les technos -->
+        {learning.enabled && learning.items.length > 0 && (
+            <div class="shrink-0 pt-2 pb-1">
+                <div class="p-2.5 sm:px-3.5 sm:py-2 rounded-md bg-surface border border-border-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="relative flex h-2 w-2 shrink-0">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-green opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-accent-green"></span>
+                        </span>
+                        <span class="font-mono text-text-dim text-[11px]">{learning.label}</span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        {learning.items.map((item) => (
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-surface-hover border border-border-subtle font-mono text-xs">
+                                <span class="font-semibold text-text-main">{item.tech}</span>
+                                {item.note && (
+                                    <span class="text-text-dim text-[11px]">({item.note})</span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        )}
+
+        <!-- Pied de section -->
+        <div class="pt-2 border-t border-border-subtle flex items-center justify-between text-xs text-text-muted shrink-0">
+            <span>Cliquez sur une technologie pour filtrer les projets associés</span>
+            <a href="#blogs" class="hover:text-text-main transition-colors">Lire mes notes &amp; articles ↓</a>
         </div>
-        <div>
-            <dt class="inline font-semibold text-fg">Aussi vu : </dt>
-            <dd class="inline">{alsoSeen.join(", ")}</dd>
-        </div>
-        <div>
-            <dt class="inline font-semibold text-fg">Méthodes et langues : </dt>
-            <dd class="inline">{methods.join(", ")}</dd>
-        </div>
-    </dl>
+    </div>
 </section>

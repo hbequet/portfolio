@@ -5,9 +5,10 @@ interface Props {
   title?: string;
   description?: string;
 }
+
 const {
-  title = "Hugo Béquet - Portfolio",
-  description = "Portfolio de Hugo Béquet, étudiant en BUT Informatique à Limoges, à la recherche d'un stage de développement fullstack / backend de 16 semaines à partir du 22 février 2027.",
+  title = "Hugo Béquet — Développeur Backend orienté performance",
+  description = "Portfolio de Hugo Béquet, étudiant en BUT Informatique à Limoges, développeur backend orienté performance.",
 } = Astro.props;
 ---
 
@@ -15,29 +16,19 @@ const {
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <script is:inline>
-      const theme = (() => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          return 'dark';
-        }
-        return 'light';
-      })();
-      if (theme === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
-        document.documentElement.classList.add('dark');
-      }
-      window.localStorage.setItem('theme', theme);
-    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-page text-fg transition-colors duration-300">
-  <slot />
+  <body class="bg-bg text-text-main selection:bg-white selection:text-black">
+    <slot />
   </body>
 </html>

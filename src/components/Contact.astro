@@ -2,16 +2,144 @@
 import { profile } from "../data/portfolio";
 ---
 
-<section id="contact" class="py-12 border-t border-line text-center">
-    <h2 class="text-3xl font-bold mb-4">Discutons ensemble</h2>
-    <p class="mb-2 text-muted">{profile.internship.title}.</p>
-    <p class="mb-6 text-muted">{profile.extra}</p>
-    <div class="flex flex-wrap justify-center gap-4">
-        <a href={`mailto:${profile.email}`} class="inline-block px-6 py-3 bg-primary text-on-primary rounded-lg hover:bg-primary-hover transition-colors font-medium">
-            M'envoyer un email
-        </a>
-        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 rounded-lg border border-fg/20 hover:bg-chip transition-colors font-medium">
-            Voir mon LinkedIn
-        </a>
+<section id="contact" class="snap-section pt-14">
+    <div class="max-w-6xl w-full mx-auto px-5 sm:px-8 py-6 flex-1 flex flex-col justify-between overflow-y-auto inner-scroll">
+
+        <!-- En-tête de section -->
+        <div class="shrink-0 space-y-2 mb-4">
+            <h2 class="text-2xl sm:text-4xl font-bold text-text-main tracking-tight">
+                Contact &amp; Recherche de Stage
+            </h2>
+            <p class="text-xs sm:text-sm text-text-muted leading-relaxed max-w-2xl">
+                {profile.contactIntro}
+            </p>
+        </div>
+
+        <!-- Section Spécifique Stage (cible de l'ancre #stage-contact) : Épurée, sans répétitions -->
+        <div id="stage-contact" class="clean-card p-5 sm:p-6 mb-5 border-2 border-accent-green/40 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-subtle pb-3">
+                <div class="flex items-center gap-2.5">
+                    <span class="relative flex h-3 w-3 shrink-0">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-green opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-accent-green"></span>
+                    </span>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-text-main">
+                            {profile.internship.title}
+                        </h3>
+                        <p class="text-xs text-text-muted">
+                            {profile.internship.type} — {profile.internship.duration}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <span class="px-2.5 py-1 rounded bg-surface-hover border border-border-subtle font-mono text-xs text-accent-green font-medium">
+                        Dès le {profile.internship.startDate}
+                    </span>
+                </div>
+            </div>
+
+            <div class="space-y-2 text-xs sm:text-sm">
+                <p class="text-text-light leading-relaxed">
+                    {profile.internship.details}
+                </p>
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-text-muted pt-1">
+                    <div>
+                        <span class="text-text-main font-medium">Localisation :</span> {profile.internship.location}
+                    </div>
+                    <div>
+                        <span class="text-text-main font-medium">Mobilité :</span> {profile.internship.mobility}
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border-subtle text-xs">
+                <span class="text-text-muted font-mono">CV disponible immédiatement sur demande</span>
+                <div class="flex items-center gap-2">
+                    <a href={`mailto:${profile.email}?subject=Opportunité de stage Février 2027`} class="px-3 py-1.5 rounded bg-text-main text-bg font-medium hover:opacity-90 transition-opacity">
+                        Proposer un stage
+                    </a>
+                    <a href={profile.linkedin.url} target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded bg-surface-hover border border-border-subtle hover:border-border-hover text-text-main transition-colors">
+                        LinkedIn ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 Cartes de Contact direct : Mail, GitHub, LinkedIn -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-5">
+
+            <!-- Carte 1 : Mail -->
+            <div class="clean-card p-4 sm:p-5 flex flex-col justify-between gap-4">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-text-muted">
+                        <span class="text-xs font-mono">Email</span>
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                        </svg>
+                    </div>
+                    <p class="text-sm font-medium text-text-main break-all font-mono">
+                        {profile.email}
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href={`mailto:${profile.email}`} class="flex-1 py-1.5 px-3 rounded bg-text-main text-bg text-xs font-medium text-center hover:opacity-90 transition-opacity">
+                        Envoyer un mail
+                    </a>
+                    <button id="copyEmailBtn" type="button" class="py-1.5 px-3 rounded bg-surface-hover border border-border-subtle hover:border-border-hover text-xs text-text-main transition-colors cursor-pointer">
+                        Copier
+                    </button>
+                </div>
+            </div>
+
+            <!-- Carte 2 : GitHub (hbequet) -->
+            <a href={profile.github.url} target="_blank" rel="noopener noreferrer" class="clean-card p-4 sm:p-5 flex flex-col justify-between gap-4 group">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-text-muted">
+                        <span class="text-xs font-mono">GitHub</span>
+                        <span class="text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                    </div>
+                    <p class="text-sm font-medium text-text-main font-mono">
+                        {profile.github.handle}
+                    </p>
+                    <p class="text-xs text-text-muted leading-relaxed">
+                        {profile.github.description}
+                    </p>
+                </div>
+                <span class="text-xs text-text-muted group-hover:text-text-main transition-colors">
+                    Voir les dépôts →
+                </span>
+            </a>
+
+            <!-- Carte 3 : LinkedIn (hgbequet) -->
+            <a href={profile.linkedin.url} target="_blank" rel="noopener noreferrer" class="clean-card p-4 sm:p-5 flex flex-col justify-between gap-4 group">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-text-muted">
+                        <span class="text-xs font-mono">LinkedIn</span>
+                        <span class="text-xs group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                    </div>
+                    <p class="text-sm font-medium text-text-main font-mono">
+                        {profile.linkedin.handle}
+                    </p>
+                    <p class="text-xs text-text-muted leading-relaxed">
+                        {profile.linkedin.description}
+                    </p>
+                </div>
+                <span class="text-xs text-text-muted group-hover:text-text-main transition-colors">
+                    Consulter le profil →
+                </span>
+            </a>
+
+        </div>
+
+        <!-- Footer minimaliste -->
+        <footer class="pt-3 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-text-muted shrink-0">
+            <span>{profile.footer}</span>
+            <div class="flex items-center gap-5">
+                <a href="#presentation" class="hover:text-text-main transition-colors">Haut de page ↑</a>
+            </div>
+        </footer>
     </div>
 </section>

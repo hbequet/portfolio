@@ -1,0 +1,115 @@
+---
+import { profile, mathShapes } from "../data/portfolio";
+---
+
+<section id="presentation" class="snap-section pt-14">
+    <div class="flex-1 max-w-6xl w-full mx-auto px-5 sm:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
+
+        <!-- GAUCHE : Animation 3D Canvas mathématique -->
+        <div class="lg:col-span-5 flex flex-col items-center justify-center order-2 lg:order-1">
+            <div class="relative w-full max-w-[340px] sm:max-w-[400px] aspect-square rounded-lg border border-border-subtle bg-bg-canvas overflow-hidden flex items-center justify-center">
+                <canvas id="mathCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+
+                <!-- Sélecteur de forme géométrique -->
+                <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] font-mono text-text-muted pointer-events-none">
+                    <span id="shapeLabel" class="px-2 py-0.5 rounded bg-bg/80 border border-border-subtle">
+                        {mathShapes[0].label}
+                    </span>
+                    <div class="flex items-center gap-1 pointer-events-auto">
+                        {mathShapes.map((shape, index) => (
+                            <button
+                                type="button"
+                                data-shape={shape.id}
+                                class:list={[
+                                    "shape-btn px-2 py-0.5 rounded text-xs transition-colors font-medium",
+                                    index === 0
+                                        ? "bg-text-main text-bg"
+                                        : "bg-surface text-text-muted border border-border-subtle hover:text-text-main"
+                                ]}
+                            >
+                                {shape.shortName}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DROITE : Texte de présentation -->
+        <div class="lg:col-span-7 flex flex-col items-start text-left space-y-4 order-1 lg:order-2">
+
+            <!-- Nom & Titre du poste -->
+            <div class="space-y-1.5">
+                <h1 class="text-4xl sm:text-6xl font-bold text-text-main tracking-tight leading-none">
+                    {profile.name}
+                </h1>
+                <p class="text-lg sm:text-2xl font-medium text-text-muted tight-heading">
+                    {profile.headline}
+                </p>
+            </div>
+
+            <!-- ENCART RECHERCHE DE STAGE HYPER VISIBLE DIRECTEMENT SOUS LE TITRE DU POSTE -->
+            <a
+                href="#stage-contact"
+                class="group w-full max-w-xl p-4 rounded-lg bg-surface border-2 border-accent-green/50 hover:border-accent-green hover:bg-surface-hover/80 transition-all shadow-sm hover:shadow-md cursor-pointer block text-left"
+                title="Cliquer pour voir l'objectif de stage et me contacter"
+            >
+                <div class="flex items-center justify-between gap-3 mb-1.5">
+                    <div class="flex items-center gap-2.5">
+                        <span class="relative flex h-3 w-3 shrink-0">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-green opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-accent-green"></span>
+                        </span>
+                        <span class="text-xs sm:text-sm font-bold text-text-main group-hover:underline underline-offset-2">
+                            {profile.internship.headline}
+                        </span>
+                    </div>
+                    <span class="text-xs font-mono text-accent-green group-hover:translate-x-1 transition-transform shrink-0 hidden sm:inline-flex items-center gap-1">
+                        Objectif &amp; Contact ↓
+                    </span>
+                </div>
+                <p class="text-xs sm:text-sm text-text-light leading-relaxed">
+                    {profile.internship.details}
+                </p>
+                <div class="mt-2.5 flex items-center justify-between text-[11px] font-mono text-text-dim border-t border-border-subtle/80 pt-2">
+                    <span class="text-text-muted">{profile.internship.mobility} — {profile.internship.location}</span>
+                    <span class="text-accent-green sm:hidden">Voir détails ↓</span>
+                </div>
+            </a>
+
+            <!-- Courte présentation -->
+            <p class="text-sm sm:text-base text-text-muted leading-relaxed max-w-xl">
+                {profile.intro}
+            </p>
+
+            <!-- Boutons d'action -->
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+                <a href="#projets" class="px-5 py-2.5 rounded-md bg-text-main text-bg font-medium text-sm hover:opacity-90 transition-opacity">
+                    Voir mes projets &amp; stage
+                </a>
+                <a href="#stage-contact" class="px-5 py-2.5 rounded-md bg-surface text-text-main border border-border-subtle hover:border-border-hover font-medium text-sm transition-colors">
+                    Me contacter / Stage
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BAS : Flèches d'invitation à descendre -->
+    <div class="pb-5 flex justify-center shrink-0">
+        <a href="#projets" aria-label="Descendre vers les projets" class="group flex flex-col items-center gap-1.5 text-text-muted hover:text-text-main transition-colors">
+            <span class="text-xs text-text-muted group-hover:text-text-main transition-colors">Découvrir</span>
+            <div class="flex flex-col items-center -space-y-2">
+                <svg class="w-4 h-4 chevron-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <svg class="w-4 h-4 chevron-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <svg class="w-4 h-4 chevron-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+        </a>
+    </div>
+</section>
