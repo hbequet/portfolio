@@ -13,7 +13,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="fr">
+<html lang="fr" class="h-full w-full overflow-hidden">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,8 +27,17 @@ const {
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <script is:inline>
+      const savedTheme = typeof localStorage !== 'undefined' ? localStorage.getItem('theme') : null;
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+      }
+    </script>
   </head>
-  <body class="bg-bg text-text-main selection:bg-white selection:text-black">
+  <body class="bg-bg text-text-main h-full w-full overflow-hidden">
     <slot />
   </body>
 </html>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Arrière-plans */
+  /* Arrière-plans - Mode Sombre (défaut) */
   --color-bg: #050505;
   --color-bg-canvas: #080808;
   --color-surface: #0d0d0d;
@@ -21,11 +21,11 @@
   --color-border-modal-hover: #404040;
   --color-border-divider: #181818;
 
-  /* Typographie & Couleurs de texte */
-  --color-text-main: #f5f5f5;
-  --color-text-muted: #888888;
-  --color-text-dim: #525252;
-  --color-text-light: #d4d4d4;
+  /* Typographie & Couleurs de texte - Mode Sombre */
+  --color-text-main: #fafafa;
+  --color-text-muted: #b4b4b4;
+  --color-text-dim: #858585;
+  --color-text-light: #ececec;
 
   /* Accents */
   --color-accent-green: #22c55e;
@@ -34,9 +34,51 @@
   --color-scrollbar-thumb: #262626;
   --color-scrollbar-thumb-hover: #404040;
 
+  /* Rendu Canvas 3D (fils de fer et sommets) */
+  --canvas-stroke: 245, 245, 245;
+
   /* Polices */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Mode Clair */
+:root.light {
+  /* Arrière-plans - Mode Clair */
+  --color-bg: #fafafa;
+  --color-bg-canvas: #f4f4f5;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f4f4f5;
+  --color-surface-card-hover: #f9fafb;
+  --color-modal-bg: #ffffff;
+  --color-modal-header: #f9fafb;
+  --color-header-bg: rgba(250, 250, 250, 0.85);
+  --color-modal-backdrop: rgba(0, 0, 0, 0.45);
+
+  /* Bordures */
+  --color-border-subtle: #e4e4e7;
+  --color-border-hover: #a1a1aa;
+  --color-border-section: #e4e4e7;
+  --color-border-header: #e4e4e7;
+  --color-border-modal: #e4e4e7;
+  --color-border-modal-hover: #a1a1aa;
+  --color-border-divider: #f4f4f5;
+
+  /* Typographie & Couleurs de texte - Mode Clair */
+  --color-text-main: #09090b;
+  --color-text-muted: #3f3f46;
+  --color-text-dim: #52525b;
+  --color-text-light: #18181b;
+
+  /* Accents */
+  --color-accent-green: #16a34a;
+
+  /* Scrollbars */
+  --color-scrollbar-thumb: #d4d4d8;
+  --color-scrollbar-thumb-hover: #a1a1aa;
+
+  /* Rendu Canvas 3D (fils de fer et sommets sombres) */
+  --canvas-stroke: 24, 24, 27;
 }
 
 @theme {
@@ -74,16 +116,40 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     background-color: var(--color-bg);
     color: var(--color-text-main);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+  }
+
+  /* Sélection de texte dynamique */
+  ::selection {
+    background-color: var(--color-text-main);
+    color: var(--color-bg);
   }
 
   /* Titres avec espacement serré naturel */
   h1, h2, h3, .tight-heading {
     letter-spacing: -0.03em;
+  }
+
+  code {
+    background-color: var(--color-surface-hover);
+    border: 1px solid var(--color-border-subtle);
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
   }
 }
 
@@ -91,16 +157,20 @@
   /* Conteneur de scroll plein écran strict */
   .snap-container {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-scrollbar-thumb) transparent;
   }
 
   .snap-section {
     height: 100vh;
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
     position: relative;
@@ -111,31 +181,30 @@
     border-bottom: 1px solid var(--color-border-section);
   }
 
-  /* Masquer la scrollbar native sur le conteneur snap pour laisser place à la mini-scrollbar par section */
-  .snap-container {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  .inner-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-scrollbar-thumb) transparent;
   }
 
-  .snap-container::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Barre de scroll discrète pour les conteneurs internes */
+  /* Barre de scroll discrète (WebKit / Chromium / Safari) */
+  .snap-container::-webkit-scrollbar,
   .inner-scroll::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
 
+  .snap-container::-webkit-scrollbar-track,
   .inner-scroll::-webkit-scrollbar-track {
     background: transparent;
   }
 
+  .snap-container::-webkit-scrollbar-thumb,
   .inner-scroll::-webkit-scrollbar-thumb {
     background: var(--color-scrollbar-thumb);
     border-radius: 3px;
   }
 
+  .snap-container::-webkit-scrollbar-thumb:hover,
   .inner-scroll::-webkit-scrollbar-thumb:hover {
     background: var(--color-scrollbar-thumb-hover);
   }
@@ -224,29 +293,17 @@
     transform: scale(1) translateY(0);
   }
 
-  /* Support des images et légendes dans le contenu de blog */
-  .modal-window img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 6px;
-    border: 1px solid var(--color-border-subtle);
-    margin: 1.25rem auto;
+  /* Affichage des icônes de thème selon le mode actif */
+  html:not(.light) .theme-sun-icon {
     display: block;
   }
-
-  .modal-window figure {
-    margin: 1.5rem 0;
+  html:not(.light) .theme-moon-icon {
+    display: none;
   }
-
-  .modal-window figure img {
-    margin: 0 auto;
+  html.light .theme-sun-icon {
+    display: none;
   }
-
-  .modal-window figcaption {
-    font-size: 0.75rem;
-    color: var(--color-text-dim);
-    text-align: center;
-    margin-top: 0.5rem;
-    font-family: var(--font-mono);
+  html.light .theme-moon-icon {
+    display: block;
   }
 }

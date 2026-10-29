@@ -207,6 +207,9 @@ function initCanvas3D() {
             };
         });
 
+        const isLight = document.documentElement.classList.contains("light");
+        const strokeColor = isLight ? "24, 24, 27" : "245, 245, 245";
+
         ctx.lineWidth = 0.8;
         for (let i = 0; i < edges.length; i++) {
             const [aIdx, bIdx] = edges[i];
@@ -216,7 +219,7 @@ function initCanvas3D() {
 
             const avgZ = (p1.z + p2.z) * 0.5;
             const alpha = Math.max(0.05, Math.min(0.42, (avgZ + 1.4) / 2.8));
-            ctx.strokeStyle = `rgba(245, 245, 245, ${alpha.toFixed(2)})`;
+            ctx.strokeStyle = `rgba(${strokeColor}, ${alpha.toFixed(2)})`;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -227,7 +230,7 @@ function initCanvas3D() {
             const pt = projected[i];
             const alpha = Math.max(0.12, Math.min(0.85, (pt.z + 1.4) / 2.6));
             const radius = Math.max(0.9, (pt.z + 1.8) * 0.65);
-            ctx.fillStyle = `rgba(245, 245, 245, ${alpha.toFixed(2)})`;
+            ctx.fillStyle = `rgba(${strokeColor}, ${alpha.toFixed(2)})`;
             ctx.beginPath();
             ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
             ctx.fill();
@@ -1045,9 +1048,24 @@ function setupCopyEmail() {
     });
 }
 
+function setupThemeToggle() {
+    const btn = document.getElementById("themeToggleBtn");
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        const isLight = document.documentElement.classList.toggle("light");
+        try {
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+        } catch (e) {
+            console.error("Impossible d'enregistrer le thème dans localStorage", e);
+        }
+    });
+}
+
 /* =================================================================
    INITIALISATION
 ================================================================== */
+setupThemeToggle();
 initCanvas3D();
 setupProjectFilters();
 setupBlogPosts();
